@@ -8,13 +8,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SignOut } from "../Auth/sign-out";
 import Navbar from "./Navbar";
-import { getAuthSession } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default async function Header() {
-  const session = await getAuthSession();
-
   return (
     <>
       <Navbar />
@@ -30,7 +27,7 @@ export default async function Header() {
               </div>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <div>
+              {/* <div>
                 {session?.user ? (
                   <SignOut /> // Utilise le composant client pour gérer la déconnexion
                 ) : (
@@ -38,7 +35,7 @@ export default async function Header() {
                     <Button variant={"destructive"}>Se connecter</Button>
                   </Link>
                 )}
-              </div>
+              </div> */}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

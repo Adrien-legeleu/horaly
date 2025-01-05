@@ -1,14 +1,37 @@
-import { authConfig } from "@/auth";
-import { getServerSession } from "next-auth"; // Import correct pour ta version
+import { connectDB } from "@/lib/mongodb";
+import User from "@/models/User";
+import type { NextAuthOptions } from "next-auth";
+import credentials from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
 
-export const getAuthSession = () => {
-  return getServerSession(authConfig);
-};
+export const authOptions: NextAuthOptions = {
+  providers: [
+    credentials({
+      name: "Credentials",
+      id: "credentials",
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        await connectDB();
+        const user = await User.findOne({
+          email: credentials?.email,
+        }).select("+password");
 
-export const getRequiredAuthSession = async () => {
-  const session = await getAuthSession();
-  if (!session?.user) {
-    throw new Error("session not found");
-  }
-  return session;
+        if (!user) throw new Error("Wrong Email");
+
+        const passwordMatch = await bcrypt.compare(
+          credentials!.password,
+          user.password
+        );
+
+        if (!passwordMatch) throw new Error("Wrong Password");
+        return user;
+      },
+    }),
+  ],
+  session: {
+    strategy: "jwt",
+  },
 };

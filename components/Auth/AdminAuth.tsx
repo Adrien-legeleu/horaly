@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import SignIn from "./sign-in";
-import { getRequiredAuthSession } from "@/lib/auth";
 
 export default function AdminAuth() {
   const [isPasswordValid, setIsPasswordValid] = useState(false);
@@ -12,6 +11,8 @@ export default function AdminAuth() {
 
   const handlePasswordSubmit = async () => {
     try {
+      console.log(adminPassword);
+
       const res = await fetch("/api/admin/check-admin-password", {
         method: "POST",
         headers: {
