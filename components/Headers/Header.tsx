@@ -10,8 +10,10 @@ import { SignOut } from "../Auth/sign-out";
 import Navbar from "./Navbar";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 export default async function Header() {
+  const { data } = useSession();
   return (
     <>
       <Navbar />
@@ -27,15 +29,15 @@ export default async function Header() {
               </div>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              {/* <div>
-                {session?.user ? (
+              <div>
+                {data?.user ? (
                   <SignOut /> // Utilise le composant client pour gérer la déconnexion
                 ) : (
                   <Link href="/account">
                     <Button variant={"destructive"}>Se connecter</Button>
                   </Link>
                 )}
-              </div> */}
+              </div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
