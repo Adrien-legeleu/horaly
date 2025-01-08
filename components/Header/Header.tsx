@@ -11,19 +11,27 @@ import { SignOut } from "../Auth/sign-out";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import Navbar from "./Navbar";
+import { Button } from "../ui/button";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
-  //   const { data: session, status } = useSession();
+  const { data: session, status } = useSession();
+  const pathname = usePathname();
 
-  //   // Gestion de l'état de chargement
-  //   if (status === "loading") {
-  //     return null; // Vous pouvez aussi retourner un spinner ou un placeholder
-  //   }
+  const noHeaderRoutes = ["/login", "/register"];
+
+  if (status === "loading") {
+    return null;
+  }
 
   return (
     <>
       <Navbar />
-      <div className="flex justify-center z-50 fixed top-2 right-8 items-center bg-white py-5 rounded-full px-8 gap-6 ">
+      <div
+        className={`flex justify-center z-50 fixed top-2 right-8 shadow-lg items-center bg-white py-5 rounded-full px-8 gap-6 ${
+          !noHeaderRoutes.includes(pathname as string) ? "" : "hidden"
+        }`}
+      >
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button>
@@ -36,20 +44,17 @@ export default function Header() {
                 <Link href="/account">Votre compte</Link>
               </div>
             </DropdownMenuItem>
-            {/* <DropdownMenuItem>
+            <DropdownMenuItem>
               <div>
                 {session?.user ? (
                   <SignOut />
                 ) : (
-                  <Link
-                    href="/login"
-                    className="border border-solid border-black rounded"
-                  >
-                    Sign In
+                  <Link href="/login">
+                    <Button>Se connecter</Button>
                   </Link>
                 )}
               </div>
-            </DropdownMenuItem> */}
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
         <LinkPreview url="cart" text="Votre panier">

@@ -7,11 +7,14 @@ import {
 } from "@/components/ui/navbar-menu";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Navbar({ className }: { className?: string }) {
   const [active, setActive] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(true);
+  const pathname = usePathname();
 
+  const noHeaderRoutes = ["/login", "/register"];
   useEffect(() => {
     let currentScroll = window.scrollY;
     const handleScroll = () => {
@@ -30,9 +33,9 @@ export default function Navbar({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        `fixed inset-x-0 max-w-lg mx-auto z-50 duration-500 ease-in-out ${
-          isVisible ? "top-2" : "-top-28"
-        }`,
+        `fixed inset-x-0 max-w-lg mx-auto z-50 duration-500 ease-in-out  ${
+          !noHeaderRoutes.includes(pathname as string) ? "" : "hidden"
+        } ${isVisible ? "top-2" : "-top-28"}`,
         className
       )}
     >
