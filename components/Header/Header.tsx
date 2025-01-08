@@ -1,3 +1,4 @@
+"use client";
 import { LinkPreview } from "@/components/ui/link-preview";
 import { IconShoppingCart, IconUserCircle } from "@tabler/icons-react";
 import {
@@ -7,20 +8,27 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SignOut } from "../Auth/sign-out";
-import Navbar from "./Navbar";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import Navbar from "./Navbar";
 
-export default async function Header() {
-  const { data } = useSession();
+export default function Header() {
+  //   const { data: session, status } = useSession();
+
+  //   // Gestion de l'état de chargement
+  //   if (status === "loading") {
+  //     return null; // Vous pouvez aussi retourner un spinner ou un placeholder
+  //   }
+
   return (
     <>
       <Navbar />
-      <div className="flex justify-center fixed top-2 right-5 items-center bg-white py-5 rounded-full px-8 gap-6 ">
+      <div className="flex justify-center z-50 fixed top-2 right-8 items-center bg-white py-5 rounded-full px-8 gap-6 ">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <IconUserCircle stroke={1.5} className="w-8 h-8" />
+            <button>
+              <IconUserCircle />
+            </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem>
@@ -28,17 +36,20 @@ export default async function Header() {
                 <Link href="/account">Votre compte</Link>
               </div>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            {/* <DropdownMenuItem>
               <div>
-                {data?.user ? (
-                  <SignOut /> // Utilise le composant client pour gérer la déconnexion
+                {session?.user ? (
+                  <SignOut />
                 ) : (
-                  <Link href="/account">
-                    <Button variant={"destructive"}>Se connecter</Button>
+                  <Link
+                    href="/login"
+                    className="border border-solid border-black rounded"
+                  >
+                    Sign In
                   </Link>
                 )}
               </div>
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
         <LinkPreview url="cart" text="Votre panier">
