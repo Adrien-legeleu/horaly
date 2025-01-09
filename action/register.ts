@@ -8,13 +8,16 @@ export const register = async (values: any) => {
 
   try {
     await connectDB();
+    console.log("Connected to MongoDB.");
+    console.log(email, password, name, phone);
+
     const userFound = await User.findOne({ email });
     if (userFound) {
       return {
         error: "Email already exists!",
       };
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(String(password), 10);
     const user = new User({
       name,
       email,

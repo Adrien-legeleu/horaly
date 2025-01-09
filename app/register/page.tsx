@@ -7,31 +7,29 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { IconEye, IconEyeOff } from "@tabler/icons-react";
+import { register } from "@/action/register";
 
 export default function Register() {
   const [error, setError] = useState<string>();
   const router = useRouter();
   const ref = useRef<HTMLFormElement>(null);
-
+  const [ispasswordVisible, setIsPasswordVisible] = useState(false);
+  const handlePassworVisibility = () => {
+    setIsPasswordVisible(!ispasswordVisible);
+  };
   const handleSubmit = async (formData: FormData) => {
-    const res = await fetch("/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: formData.get("email"),
-        password: formData.get("password"),
-        name: formData.get("name"),
-      }),
+    const r = await register({
+      email: formData.get("email"),
+      password: formData.get("password"),
+      name: formData.get("name"),
     });
-
-    const data = await res.json();
-    if (data.error) {
-      setError(data.error);
+    ref.current?.reset();
+    if (r?.error) {
+      setError(r.error);
+      return;
     } else {
-      ref.current?.reset();
-      router.push("/login");
+      return router.push("/login");
     }
   };
 
@@ -57,6 +55,7 @@ export default function Register() {
                 id="name"
                 placeholder="Adrien Legeleux"
                 type="name"
+                name="name"
                 required
                 autoComplete="name"
               />
@@ -67,6 +66,7 @@ export default function Register() {
                 id="email"
                 placeholder="adrienlegeleu@gmail.com"
                 type="email"
+                name="email"
                 required
                 autoComplete="email"
               />
@@ -74,12 +74,25 @@ export default function Register() {
           </div>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="password">Mot de passe</Label>
-            <Input
-              id="password"
-              placeholder="••••••••"
-              type="password"
-              required
-            />
+            <div className="relative">
+              <Input
+                id="password"
+                placeholder="••••••••"
+                name="password"
+                type={ispasswordVisible ? "text" : "password"}
+                required
+              />
+              <span
+                className="absolute top-1/2 right-2 cursor-pointer -translate-y-1/2"
+                onClick={handlePassworVisibility}
+              >
+                {ispasswordVisible ? (
+                  <IconEyeOff stroke={2} />
+                ) : (
+                  <IconEye stroke={2} />
+                )}
+              </span>
+            </div>
           </LabelInputContainer>
           <button
             className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"

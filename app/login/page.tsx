@@ -9,8 +9,14 @@ import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import { IconEye, IconEyeOff } from "@tabler/icons-react";
+
 export default function Login() {
   const [error, setError] = useState<string>();
+  const [ispasswordVisible, setIsPasswordVisible] = useState(false);
+  const handlePassworVisibility = () => {
+    setIsPasswordVisible(!ispasswordVisible);
+  };
   const router = useRouter();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -50,17 +56,31 @@ export default function Login() {
               placeholder="adrienlegeleu@gmail.com"
               type="email"
               required
+              name="email"
               autoComplete="email"
             />
           </LabelInputContainer>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="password">Mot de passe</Label>
-            <Input
-              id="password"
-              placeholder="••••••••"
-              type="password"
-              required
-            />
+            <div className="relative">
+              <Input
+                id="password"
+                placeholder="••••••••"
+                type={ispasswordVisible ? "text" : "password"}
+                required
+                name="password"
+              />
+              <span
+                onClick={handlePassworVisibility}
+                className="absolute top-1/2 right-2 cursor-pointer -translate-y-1/2"
+              >
+                {ispasswordVisible ? (
+                  <IconEyeOff stroke={2} />
+                ) : (
+                  <IconEye stroke={2} />
+                )}
+              </span>
+            </div>
           </LabelInputContainer>
           <button
             className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"

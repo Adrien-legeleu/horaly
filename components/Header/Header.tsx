@@ -28,7 +28,7 @@ export default function Header() {
     <>
       <Navbar />
       <div
-        className={`flex justify-center z-50 fixed top-2 right-8 shadow-lg items-center bg-white py-5 rounded-full px-8 gap-6 ${
+        className={`flex justify-center z-50 fixed top-2 right-8 border shadow-sm items-center bg-white py-5 rounded-full px-8 gap-6 ${
           !noHeaderRoutes.includes(pathname as string) ? "" : "hidden"
         }`}
       >
