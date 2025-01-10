@@ -44,17 +44,21 @@ export default function Header() {
                 <Link href="/account">Votre compte</Link>
               </div>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <div>
-                {session?.user ? (
-                  <SignOut />
-                ) : (
-                  <Link href="/login">
-                    <Button>Se connecter</Button>
-                  </Link>
-                )}
-              </div>
-            </DropdownMenuItem>
+
+            {session?.user ? (
+              <DropdownMenuItem className="flex flex-col">
+                <Link href="/register-admin">
+                  <Button variant="secondary">Administrateur</Button>
+                </Link>
+                <SignOut />
+              </DropdownMenuItem>
+            ) : (
+              <DropdownMenuItem>
+                <Link href="/login">
+                  <Button>Se connecter</Button>
+                </Link>
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
         <LinkPreview url="cart" text="Votre panier">
