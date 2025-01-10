@@ -5,9 +5,9 @@ import User from "@/models/User";
 
 export const registerAdmin = async (values: {
   email: string;
-  rightCode?: string;
+  code: string;
 }) => {
-  const { email, rightCode } = values;
+  const { email, code } = values;
 
   try {
     await connectDB();
@@ -19,7 +19,7 @@ export const registerAdmin = async (values: {
       };
     }
 
-    if (rightCode !== "validCode") {
+    if (code !== process.env.ADMIN_PASSWORD) {
       return {
         error: "Invalid rights code",
       };

@@ -12,14 +12,18 @@ import { useRouter } from "next/navigation";
 export default function page() {
   const router = useRouter();
   const { data: session } = useSession();
-  const [error, setError] = useState();
+  const [error, setError] = useState<string>();
   const handleSubmit = async (formData: FormData) => {
+    if (!session?.user?.email) {
+      setError("L'email utilisateur est introuvable.");
+      return;
+    }
     const res = await registerAdmin({
-      email: session?.user?.email,
-      code: formData.get("code"),
+      email: session.user.email,
+      code: formData.get("code") as string,
     });
     if (res?.error) {
-      setError(r.error);
+      setError(res.error);
       return;
     } else {
       return router.push("/dashboard");
@@ -36,14 +40,13 @@ export default function page() {
           Entrez vos identifiants pour accéder à votre compte.
         </p>
 
-        <form className="my-8" onSubmit={handleSubmit}>
+        <form className="my-8" action={handleSubmit}>
           {error && <div className="text-red-500">{error}</div>}
 
           <LabelInputContainer>
-            <Label htmlFor="code">Email</Label>
             <Input
               id="code"
-              placeholder="adrienlegeleu@gmail.com"
+              placeholder="Code administrateur"
               type="text"
               required
               name="code"
@@ -51,10 +54,10 @@ export default function page() {
           </LabelInputContainer>
 
           <button
-            className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+            className="bg-gradient-to-br mt-5 relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
             type="submit"
           >
-            Connexion &rarr;
+            devenir Administrateur
             <BottomGradient />
           </button>
 
